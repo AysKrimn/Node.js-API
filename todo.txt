@@ -1,0 +1,1 @@
+swagger & admin.js implementation
