@@ -11,7 +11,6 @@ export default function LoginForm() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
-
     const login_user = async (event) => {
 
         event.preventDefault()
@@ -48,6 +47,8 @@ export default function LoginForm() {
         } else if (request.status >= 200 && request.status <= 299) {
 
             // login olmuştur
+            // userId cache al
+            localStorage.setItem("public_id", response.data._id)
             window.location.href = "/"
         }
     }
