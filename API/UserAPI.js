@@ -9,6 +9,9 @@ import userModel from '../db/Models/UserModel.js'
 import bcrypt from "bcrypt";
 
 
+// endpoints 
+// /api/v1/users/
+
 // spesifik user bulma endpointi
 app.get("/:userName", async function(request, response) {
 

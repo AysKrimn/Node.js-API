@@ -1,6 +1,7 @@
 import express from "express";
 import connect_to_db from "./db/Connect.js";
 import 'dotenv/config'
+import cors from 'cors'
 
 const server = express()
 
@@ -9,9 +10,18 @@ connect_to_db()
 
 const port = process.env['APP_PORT']
 
+// CORS YAPISINI AYARLA
+
+
+// swagger -> API dökümantasyonlu yazma
+// admin.js -> admin paneli oluşturma
+// multer -> resim, video vs işleme
+
 // middleware 
 // bu middleware API ile JSON verileri body'e atar.
 server.use(express.json())
+// bu middleware cors politikası kaldırır
+server.use(cors())
 
 // API
 import UserAPI from "./API/UserAPI.js"
