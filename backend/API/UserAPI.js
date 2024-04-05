@@ -9,10 +9,24 @@ import userModel from '../db/Models/UserModel.js'
 import bcrypt from "bcrypt";
 
 
-// endpoints 
-// /api/v1/users/
-
-// spesifik user bulma endpointi
+/**
+ * @openapi
+ * /api/v1/users/<username>:
+ *   get:
+ *     description: Belirtilen kullanıcı adının profil özetini gösterir
+ *   parameters:
+ *     - name: username
+ *       in: path
+ *       required: true
+ *       schema:
+ *          type: string
+ *   
+ *   responses:
+ *       "200":
+ *         description: İstek başarılıdır istenilen kullanıcının özetini alırsınız.
+ *       "404":
+ *         description: Belirtilen kullanıcı bulunamamıştır.
+ */
 app.get("/:userName", async function(request, response) {
 
     const user = await userModel.findOne({ name: request.params.userName})
@@ -27,6 +41,31 @@ app.get("/:userName", async function(request, response) {
 })
 
 // bu endpoint giriş yapmayı sağlar.
+
+/**
+ * @openapi
+ * /api/v1/users/giris-yap:
+ *   post:
+ *     description: Giriş Yaparsınız
+ *   parameters:
+ *     - name: username
+ *       in: body
+ *       required: true
+ *       schema:
+ *          type: string
+ *     - name: password
+ *       in: body
+ *       required: true
+ *       schema:
+ *          type: password
+ *   
+ *   responses:
+ *       "200":
+ *         description: İstek başarılıdır istenilen kullanıcının özetini alırsınız.
+ *       "404":
+ *         description: Belirtilen kullanıcı bulunamamıştır.
+ */
+
 app.post("/giris-yap", async function(request, response) {
 
         const { username, password } = request.body
