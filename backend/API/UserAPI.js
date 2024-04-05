@@ -8,9 +8,22 @@ import userModel from '../db/Models/UserModel.js'
 // utils
 import bcrypt from "bcrypt";
 
+// user onaylama
+app.get("/verify/:userId", async function(request, response) {
 
-// endpoints 
-// /api/v1/users/
+    try {
+
+        const userId = request.params.userId
+        const user = await userModel.findOne({ _id: userId})
+        
+        response.status(200).json({ data: user})
+    } catch (error) {
+        
+        console.log("Error [VERIFY USER API]", error)
+        response.status(404).json({ data: "Böyle bir kullanıcı bulunamadı"})
+    }   
+
+})
 
 // spesifik user bulma endpointi
 app.get("/:userName", async function(request, response) {

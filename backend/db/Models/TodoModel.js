@@ -6,6 +6,11 @@ const todoSchema = new Schema({
 
     // doc | field
     // doc icinde görünmez bir _id var.
+    userId: {
+
+        type: String
+    },
+    
     task: {
         type: String,
     },

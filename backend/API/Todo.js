@@ -116,7 +116,14 @@ app.post("/:todoId/guncelle", async function(request, response) {
 // post isteği geliyosa body içinde ekstre bilgiler gönderilir
 app.post("/ekle", async function(request, response) {
 
-        const { task_data } = request.body
+        const { task_data, userId } = request.body
+
+        console.log("GELEN VERİLER :", request.body)
+
+        if (!userId) {
+
+            return response.status(400).json({ data: "Lütfen giriş yapın."})
+        }
 
         if (!task_data) {
 
@@ -126,9 +133,11 @@ app.post("/ekle", async function(request, response) {
         // todo oluştur
         const new_todo = await todo_model.create({
 
-                task: task_data
+                task: task_data,
+                userId: userId
         })
 
+        console.log("NEW TODO:", new_todo)
 
         response.status(201).json({ data: new_todo})
 
