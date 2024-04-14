@@ -2,31 +2,42 @@ import express from 'express'
 
 const app = express.Router()
 
+// jwt 
+import jwt from 'jsonwebtoken'
 // db
 import userModel from '../db/Models/UserModel.js'
 
 // utils
 import bcrypt from "bcrypt";
 
+app.post("/verify-token", async function(request, response) {
 
-/**
- * @openapi
- * /api/v1/users/<username>:
- *   get:
- *     description: Belirtilen kullanıcı adının profil özetini gösterir
- *   parameters:
- *     - name: username
- *       in: path
- *       required: true
- *       schema:
- *          type: string
- *   
- *   responses:
- *       "200":
- *         description: İstek başarılıdır istenilen kullanıcının özetini alırsınız.
- *       "404":
- *         description: Belirtilen kullanıcı bulunamamıştır.
- */
+    const { token } = request.body
+
+    if (!token) {
+
+        return response.status(400).json({ data: "Token Belirtilmedi."})
+    }
+
+
+    jwt.verify(token, process.env['JWT_SECRET'], function(error, decoded) {
+
+        if (error) {
+
+            return response.status(404).json({ data: "Geçersiz Token"})
+
+        } else {
+
+            return response.status(200).json({ data: decoded})
+        }
+
+    })
+
+   
+
+})
+
+
 app.get("/:userName", async function(request, response) {
 
     const user = await userModel.findOne({ name: request.params.userName})
@@ -41,31 +52,6 @@ app.get("/:userName", async function(request, response) {
 })
 
 // bu endpoint giriş yapmayı sağlar.
-
-/**
- * @openapi
- * /api/v1/users/giris-yap:
- *   post:
- *     description: Giriş Yaparsınız
- *   parameters:
- *     - name: username
- *       in: body
- *       required: true
- *       schema:
- *          type: string
- *     - name: password
- *       in: body
- *       required: true
- *       schema:
- *          type: password
- *   
- *   responses:
- *       "200":
- *         description: İstek başarılıdır istenilen kullanıcının özetini alırsınız.
- *       "404":
- *         description: Belirtilen kullanıcı bulunamamıştır.
- */
-
 app.post("/giris-yap", async function(request, response) {
 
         const { username, password } = request.body
@@ -89,7 +75,18 @@ app.post("/giris-yap", async function(request, response) {
             return response.status(400).json({ data: "Lütfen bilgileriniz kontrol edip tekrar deneyiniz"})
         }
 
-        response.status(200).json({ data: user })
+        // passaport
+        const passaport = {
+
+            id: user._id,
+            username: user.name,
+            email: user.email,
+            role: user.roles 
+        }
+
+        const token = jwt.sign(passaport, process.env['JWT_SECRET'])
+
+        response.status(200).json({ data: token })
 })
 // bu endpoint hesap oluşturru.
 app.post("/hesap-olustur", async function(request, response) {
