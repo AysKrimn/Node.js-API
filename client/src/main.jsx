@@ -6,15 +6,19 @@ import './index.css'
 
 // BOTSRAP CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
 // REACT ROUTER DOM 
 import { BrowserRouter } from 'react-router-dom';
+// User Context
+import UserContext from './Context/UserContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 
   <BrowserRouter>
-      <App />
+    
+    <UserContext>
+       <App />
+    </UserContext>
+
   </BrowserRouter>
 
 )

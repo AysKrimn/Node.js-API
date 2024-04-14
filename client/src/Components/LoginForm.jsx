@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
-import { base_user_api_url } from '../Utils/Config';
+
+import { LoginService } from '../Service/ServiceHandler';
 
 
 export default function LoginForm() {
@@ -22,32 +23,18 @@ export default function LoginForm() {
             return
         }
 
-        const request = await fetch(`${event.target.action}/giris-yap`, {
-
-            method: event.target.method,
-            headers: {
-
-                "Content-type": "application/json"
-            },
-
-            body: JSON.stringify({
-
-                username: username,
-                password: password
-            })
-        })
-
-        const response = await request.json()
+        const response = await LoginService({ username: username, password: password})
 
         console.log("[LOGIN API] YANIT:", response)
 
-        if (request.status >= 400 && request.status <= 499) {
+        if (response.status >= 400 && response.status <= 499) {
 
             setError(response.data)
-            return
-        } else if (request.status >= 200 && request.status <= 299) {
+
+        } else if (response.status >= 200 && response.status <= 299) {
 
             // login olmuştur
+            localStorage.setItem("token", response.data)
             window.location.href = "/"
         }
     }
@@ -55,7 +42,7 @@ export default function LoginForm() {
 return (
     <>
 
-        <form action={base_user_api_url} method='post' onSubmit={login_user}>
+        <form onSubmit={login_user}>
 
             <p className='text-danger'>{error}</p>
 
