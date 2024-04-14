@@ -3,31 +3,13 @@ import connect_to_db from "./db/Connect.js";
 import 'dotenv/config'
 import cors from 'cors'
 
-import swaggerJSDoc from "swagger-jsdoc";
-import swaggerUi, { serve } from "swagger-ui-express"
 
-const options = {
-    
-    definition: {
-      openapi: '3.0.0',
-      info: {
-        title: 'Hello World',
-        version: '1.0.0',
-      },
-    },
-    apis: ['./API/UserAPI.js'], // files containing annotations as above
-  };
-
-const openapiSpecification = swaggerJSDoc(options);
 
 const server = express()
 // veritabanını çağır
 connect_to_db()
 
 const port = process.env['APP_PORT']
-
-// CORS YAPISINI AYARLA
-
 
 // swagger -> API dökümantasyonlu yazma
 // admin.js -> admin paneli oluşturma
@@ -36,6 +18,7 @@ const port = process.env['APP_PORT']
 // middleware 
 // bu middleware API ile JSON verileri body'e atar.
 server.use(express.json())
+// CORS YAPISINI AYARLA
 // bu middleware cors politikası kaldırır
 server.use(cors())
 
@@ -57,7 +40,6 @@ const endpoint = "/api/v1"
 // API ENDPOINTS
 server.use(`${endpoint}/users`, UserAPI)  // /api/v1/users/
 server.use(`${endpoint}/todos`, TodoAPI)  // api/v1/todos/düzenle 
-server.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 // portu dinle
 server.listen(port, () => {
