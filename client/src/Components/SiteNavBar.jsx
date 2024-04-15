@@ -14,10 +14,15 @@ import { Link } from 'react-router-dom';
 
 function SiteNavBar() {
 
-    const { user } = useContext(UserProvider)
+    const { user, setUser } = useContext(UserProvider)
+
+    const logout = () => {
+
+        localStorage.removeItem('token')
+        setUser(null)
+    }
 
     const navbar_layout = () => {
-
 
         return ( 
         
@@ -40,7 +45,7 @@ function SiteNavBar() {
                                             <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
                                             <NavDropdown.Divider />
                                             <NavDropdown.Item href="#action/3.4">
-                                                Separated link
+                                                <Link onClick={logout} to="/" className='nav-link text-danger'>Çıkış Yap</Link>
                                             </NavDropdown.Item>
                                              </NavDropdown>
                                     :
