@@ -9,30 +9,14 @@ import userModel from '../db/Models/UserModel.js'
 
 // utils
 import bcrypt from "bcrypt";
+// middleware
+import { checkToken } from '../Authentication/checkToken.js';
 
-app.post("/verify-token", async function(request, response) {
+app.get("/verify-token", checkToken, async function(request, response) {
 
-    const { token } = request.body
+    console.log("verify token:", request.user)
 
-    if (!token) {
-
-        return response.status(400).json({ data: "Token Belirtilmedi."})
-    }
-
-
-    jwt.verify(token, process.env['JWT_SECRET'], function(error, decoded) {
-
-        if (error) {
-
-            return response.status(404).json({ data: "Geçersiz Token"})
-
-        } else {
-
-            return response.status(200).json({ data: decoded})
-        }
-
-    })
-
+    return response.status(200).json({ data: request.user })
    
 
 })
@@ -40,7 +24,7 @@ app.post("/verify-token", async function(request, response) {
 
 app.get("/:userName", async function(request, response) {
 
-    const user = await userModel.findOne({ name: request.params.userName})
+    const user = await userModel.findOne({ name: request.params.userName}).select("-password")
 
     if (user === null) {
 

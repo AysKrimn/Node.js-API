@@ -4,7 +4,7 @@ const app = express.Router()
 
 // TODO MODEL
 import todo_model from '../db/Models/TodoModel.js'
-
+import { checkToken } from '../Authentication/checkToken.js'
 
 // tüm todoları gönder
 app.get('/', async function(request, response) {
@@ -38,6 +38,10 @@ app.get('/:todoId', async function(request, response) {
 
    
 })
+
+
+// aşağıdaki tüm endpointler için token doğrulaması yap
+app.use(checkToken)
 
 // bu endpoint todo siler
 app.get("/:todoId/sil", async function(request, response) {
@@ -126,7 +130,8 @@ app.post("/ekle", async function(request, response) {
         // todo oluştur
         const new_todo = await todo_model.create({
 
-                task: task_data
+                task: task_data,
+                userId: "AHAHAHS"
         })
 
 
