@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { base_todo_api_url } from '../Utils/Config';
 import { UserProvider } from '../Context/UserContext';
+import { AddTodoService } from '../Service/ServiceHandler';
 
 function CreateTodoModal() {
   const [show, setShow] = useState(false);
@@ -18,23 +19,7 @@ function CreateTodoModal() {
 
         event.preventDefault()
 
-        const request = await fetch(`${event.target.action}/ekle`, {
-
-            method: event.target.method,
-            headers: {
-
-                "Content-type": "application/json"
-            },
-
-            body: JSON.stringify({
-                
-                userId: user._id,
-                task_data: task
-            })
-
-        })
-
-        const response = await request.json()
+        const request = await AddTodoService({ task })
         
         if (request.status === 201) {
 
@@ -42,7 +27,7 @@ function CreateTodoModal() {
             window.location.reload()
         } else {
 
-            alert(response.data)
+            alert(request.data)
         }
   }
 

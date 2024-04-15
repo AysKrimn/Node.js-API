@@ -120,11 +120,6 @@ app.post("/ekle", async function(request, response) {
 
         console.log("GELEN VERİLER :", request.body)
 
-        if (!userId) {
-
-            return response.status(400).json({ data: "Lütfen giriş yapın."})
-        }
-
         if (!task_data) {
 
             return response.status(400).json({ data: "Bir task belirtmek zorundasınız."})

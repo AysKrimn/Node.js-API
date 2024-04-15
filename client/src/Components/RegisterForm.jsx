@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 
 // BASE URI
 import { base_user_api_url } from '../Utils/Config';
+import { RegisterService } from '../Service/ServiceHandler';
 
 
 export default function RegisterForm() {
@@ -51,30 +52,14 @@ export default function RegisterForm() {
         }
 
 
-        // api isteği yap
-        const request = await fetch(`${event.target.action}/hesap-olustur`, {
+        // api isteği
+        const request = await RegisterService({username: username, email: email, password: password})
 
-                method: event.target.method,
-                headers: {
-
-                    "Content-type": "application/json"
-                },
-
-                body: JSON.stringify({
-
-                    username: username,
-                    email: email,
-                    password: password
-                })
-        })
-
-        const response = await request.json()
-
-        console.log("SUNUCUDAN GELEN YANIT:", response, "SUNUCUDAN GELEN STATUS KOD:", request.status)
+        console.log("[REGISTER API]:", request)
   
         if (request.status >= 400 && request.status <= 499) {
 
-            setFormErrors([...formErrors, response.data])
+            setFormErrors([...formErrors, request.data])
             return
         } else if (request.status >= 200 && request.status <= 299) {
 

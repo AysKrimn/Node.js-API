@@ -8,7 +8,14 @@ import { Link } from 'react-router-dom';
 
 
 function SiteNavBar() {
-  const { user } = useContext(UserProvider)
+  const { user, setUser } = useContext(UserProvider)
+
+  function logOut() {
+
+      localStorage.removeItem("token")
+      window.location.href = "/"
+  }
+
 
   function updateLayout() {
 
@@ -23,9 +30,7 @@ function SiteNavBar() {
                     </NavDropdown.Item>
                     <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
                     <NavDropdown.Divider />
-                    <NavDropdown.Item href="#action/3.4">
-                    Separated link
-                    </NavDropdown.Item>
+                    <Link onClick={logOut} className='text-danger dropdown-item'>Çıkış Yap</Link>
             </NavDropdown>            
             )
 
@@ -43,7 +48,6 @@ function SiteNavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className='w-100'>
-            <Nav.Link href="/create-todo">Todo Oluştur</Nav.Link>
             <Nav.Link href="#link">Link</Nav.Link>
 
             {updateLayout()}

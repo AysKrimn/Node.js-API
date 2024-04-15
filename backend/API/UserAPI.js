@@ -8,20 +8,14 @@ import userModel from '../db/Models/UserModel.js'
 // utils
 import bcrypt from "bcrypt";
 
-// user onaylama
-app.get("/verify/:userId", async function(request, response) {
+// json web token
+import jwt from 'jsonwebtoken'
 
-    try {
+// user onaylama (KÖTÜ YÖNTEM)
+app.get("/verify/token", async function(request, response) {
 
-        const userId = request.params.userId
-        const user = await userModel.findOne({ _id: userId})
-        
-        response.status(200).json({ data: user})
-    } catch (error) {
-        
-        console.log("Error [VERIFY USER API]", error)
-        response.status(404).json({ data: "Böyle bir kullanıcı bulunamadı"})
-    }   
+        console.log("VERIFY API HEADER:", request.headers)
+        response.json({ data: "isteğini aldım."})
 
 })
 
@@ -63,7 +57,10 @@ app.post("/giris-yap", async function(request, response) {
             return response.status(400).json({ data: "Lütfen bilgileriniz kontrol edip tekrar deneyiniz"})
         }
 
-        response.status(200).json({ data: user })
+        // kullanıcıya passaport oluştur
+        const token = jwt.sign({user}, process.env['JWT_SECRET'])
+
+        response.status(200).json({ data: token })
 })
 // bu endpoint hesap oluşturru.
 app.post("/hesap-olustur", async function(request, response) {

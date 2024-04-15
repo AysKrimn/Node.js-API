@@ -1,4 +1,5 @@
 import React from 'react'
+import CreateTodoModal from '../Components/CreateTodoModal'
 
 export default function HomePage() {
   return (
@@ -6,7 +7,13 @@ export default function HomePage() {
     <>
     
 
-                <h1>AnaSayfa</h1>
+    <div className="d-flex align-items-center">
+
+            <h2>Dashboard</h2>
+            <CreateTodoModal></CreateTodoModal>
+
+    </div>
+    <hr />
 
     
     </>

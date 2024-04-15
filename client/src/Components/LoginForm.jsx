@@ -4,6 +4,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import { base_user_api_url } from '../Utils/Config';
+import { LoginService } from '../Service/ServiceHandler';
 
 
 export default function LoginForm() {
@@ -21,34 +22,21 @@ export default function LoginForm() {
             return
         }
 
-        const request = await fetch(`${event.target.action}/giris-yap`, {
+ 
+        // login api servisini çağır
+        const request = await LoginService({ username, password})
 
-            method: event.target.method,
-            headers: {
-
-                "Content-type": "application/json"
-            },
-
-            body: JSON.stringify({
-
-                username: username,
-                password: password
-            })
-        })
-
-        const response = await request.json()
-
-        console.log("[LOGIN API] YANIT:", response)
+        console.log("[LOGIN API] YANIT:", request)
 
         if (request.status >= 400 && request.status <= 499) {
 
-            setError(response.data)
+            setError(request.data)
             return
         } else if (request.status >= 200 && request.status <= 299) {
 
             // login olmuştur
             // userId cache al
-            localStorage.setItem("public_id", response.data._id)
+            localStorage.setItem("token", request.data)
             window.location.href = "/"
         }
     }
