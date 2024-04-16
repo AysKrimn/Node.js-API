@@ -11,13 +11,19 @@ import { BrowserRouter } from 'react-router-dom';
 
 // CONTEXT API
 import UserContext from './Context/UserContext.jsx';
+// TASK API
+import TaskContext from './Context/TaskContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 
   <BrowserRouter>
 
     <UserContext>
-        <App />
+      
+        <TaskContext>
+            <App />
+        </TaskContext>
+
     </UserContext>
   
   </BrowserRouter>
