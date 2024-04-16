@@ -22,6 +22,13 @@ export default function SiteLayout() {
           // tokeni kontrol et ve useri setle
           const request = await validateToken()
           console.log("[VERIFY API]:", request)
+          // user statesini güncelle
+          if (request.status === 200) {
+              
+              setUser(request.data.user)
+          }
+
+          
           setLoadPage(true)
       }
 
