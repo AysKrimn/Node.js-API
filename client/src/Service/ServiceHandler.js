@@ -70,6 +70,18 @@ const RegisterService = async (payload = {}) => {
 
 
 // TODO API
+const GetAllTodos = async () => {
+
+    const request = await fetch(`${base_todo_api_url}`)
+    const response = await request.json()
+
+    response.status = request.status
+
+    return response
+
+}
+
+
 const AddTodoService = async (payload = {}) => {
 
     const request = await fetch(`${base_todo_api_url}/ekle`, {
@@ -91,6 +103,20 @@ const AddTodoService = async (payload = {}) => {
 }
 
 
+const DeleteTodoService = async (taskId="") => {
+
+    const request = await fetch(`${base_todo_api_url}/${taskId}/sil`, {
+
+        headers: static_header
+    })
+    const response = await request.json()
+
+    response.status = request.status
+
+    return response
+}
+
+
 
 // END OF TODO API 
 
@@ -99,5 +125,7 @@ export {
     validateToken,
     LoginService,
     RegisterService,
-    AddTodoService
+    AddTodoService,
+    GetAllTodos,
+    DeleteTodoService
 }
