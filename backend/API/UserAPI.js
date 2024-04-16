@@ -11,11 +11,16 @@ import bcrypt from "bcrypt";
 // json web token
 import jwt from 'jsonwebtoken'
 
-// user onaylama (KÖTÜ YÖNTEM)
-app.get("/verify/token", async function(request, response) {
 
-        console.log("VERIFY API HEADER:", request.headers)
-        response.json({ data: "isteğini aldım."})
+// auth middleware
+import { checkToken } from '../Auth/CheckToken.js';
+
+// user onaylama (KÖTÜ YÖNTEM)
+app.get("/verify/token", checkToken, async function(request, response) {
+
+        console.log("REQ USER:", request.user)
+
+        response.status(200).json({ data: request.user})
 
 })
 

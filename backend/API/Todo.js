@@ -4,7 +4,8 @@ const app = express.Router()
 
 // TODO MODEL
 import todo_model from '../db/Models/TodoModel.js'
-
+import { checkToken } from '../Auth/CheckToken.js'
+// Auth MiddleWare
 
 // tüm todoları gönder
 app.get('/', async function(request, response) {
@@ -38,6 +39,9 @@ app.get('/:todoId', async function(request, response) {
 
    
 })
+
+// buradan itibaren token kontrolü yap
+app.use(checkToken)
 
 // bu endpoint todo siler
 app.get("/:todoId/sil", async function(request, response) {
