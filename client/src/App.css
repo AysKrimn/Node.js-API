@@ -1,0 +1,18 @@
+.taskId {
+
+    font-size: small;
+}
+
+
+.task-date::before {
+
+    content: "• ";
+}
+
+
+#dropdown-button-dark-example1 {
+
+
+    background-color: black !important;
+    border: none;
+}
