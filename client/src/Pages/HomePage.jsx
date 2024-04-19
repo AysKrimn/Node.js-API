@@ -3,11 +3,12 @@ import CreateTodoModal from '../Components/CreateTodoModal'
 import { TaskProvider } from '../Context/TaskContext'
 import { GetAllTodos } from '../Service/ServiceHandler'
 import TaskCard from '../Components/TaskCard'
+import { UserProvider } from '../Context/UserContext'
 
 export default function HomePage() {
   
   const { tasks, setTasks } = useContext(TaskProvider)
-  
+  const { user } = useContext(UserProvider)
 
   useEffect(() => {
 
@@ -35,7 +36,9 @@ export default function HomePage() {
     <div className="d-flex align-items-center">
 
             <h2>Dashboard</h2>
-            <CreateTodoModal></CreateTodoModal>
+
+            { user === null ? undefined : <CreateTodoModal></CreateTodoModal>  }
+ 
 
     </div>
     <hr />

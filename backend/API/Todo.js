@@ -12,7 +12,7 @@ app.get('/', async function(request, response) {
 
 
     // bütün todoları döndür
-    const all_todos = await todo_model.find({})
+    const all_todos = await todo_model.find({}).populate("user")
     
     response.status(200).json({ data: all_todos})
 
@@ -25,7 +25,7 @@ app.get('/:todoId', async function(request, response) {
     try {
 
         const todoId = request.params.todoId
-        const todo = await todo_model.findOne({ _id: todoId})
+        const todo = await todo_model.findOne({ _id: todoId}).populate("user")
     
         response.status(200).json({ data: todo})
 
@@ -120,9 +120,10 @@ app.post("/:todoId/guncelle", async function(request, response) {
 // post isteği geliyosa body içinde ekstre bilgiler gönderilir
 app.post("/ekle", async function(request, response) {
 
-        const { task_data, userId } = request.body
+        const { task_data } = request.body
 
         console.log("GELEN VERİLER :", request.body)
+        console.log("EKLE API:", request.user)
 
         if (!task_data) {
 
@@ -133,8 +134,10 @@ app.post("/ekle", async function(request, response) {
         const new_todo = await todo_model.create({
 
                 task: task_data,
-                userId: userId
+                user: request.user.user._id
         })
+
+        await new_todo.populate("user")
 
         console.log("NEW TODO:", new_todo)
 

@@ -26,6 +26,10 @@ export default function SiteLayout() {
           if (request.status === 200) {
               
               setUser(request.data.user)
+          } else if (request.status === 403) {
+
+                alert("Oturumunuzun süresi doldu lütfen giriş yapın")
+                localStorage.removeItem("token")
           }
 
           

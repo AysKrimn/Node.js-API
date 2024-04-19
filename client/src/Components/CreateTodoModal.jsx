@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import { base_todo_api_url } from '../Utils/Config';
 import { UserProvider } from '../Context/UserContext';
 import { AddTodoService } from '../Service/ServiceHandler';
+import { TaskProvider } from '../Context/TaskContext';
 
 function CreateTodoModal() {
   const [show, setShow] = useState(false);
@@ -14,6 +15,7 @@ function CreateTodoModal() {
   // states
   const [task, setTask] = useState("")
   const { user } = useContext(UserProvider)
+  const { tasks, setTasks} = useContext(TaskProvider)
 
   const create_todo = async (event) => {
 
@@ -24,7 +26,7 @@ function CreateTodoModal() {
         if (request.status === 201) {
 
             // todo başarılı bir şekilde oluştu
-            window.location.reload()
+            setTasks([...tasks, request.data])
         } else {
 
             alert(request.data)

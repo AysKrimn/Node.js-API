@@ -81,6 +81,16 @@ const GetAllTodos = async () => {
 
 }
 
+// Spesifik Olarak Al
+const GetSingleTodo = async (taskId="") => {
+
+    const request = await fetch(`${base_todo_api_url}/${taskId}`)
+    const response = await request.json()
+
+    response.status = request.status
+
+    return response
+}
 
 const AddTodoService = async (payload = {}) => {
 
@@ -102,6 +112,27 @@ const AddTodoService = async (payload = {}) => {
     return response
 }
 
+
+
+const UpdateTodoService = async (payload = {}) => {
+
+    const request = await fetch(`${base_todo_api_url}/${payload.taskId}/guncelle`, {
+
+        method: "post",
+        headers: static_header,
+
+        body: JSON.stringify({
+            
+            task_data: payload.task
+        })
+
+    })
+
+    const response = await request.json()
+    response.status = request.status
+
+    return response
+}
 
 const DeleteTodoService = async (taskId="") => {
 
@@ -127,5 +158,7 @@ export {
     RegisterService,
     AddTodoService,
     GetAllTodos,
+    GetSingleTodo,
+    UpdateTodoService,
     DeleteTodoService
 }
