@@ -81,6 +81,16 @@ const GetAllTodos = async () => {
 
 }
 
+const GetSingleTodo = async (taskId="") => {
+    
+    const request = await fetch(`${base_todo_api_url}/${taskId}`)
+    const response = await request.json()
+
+    response.status = request.status
+
+    return response
+
+}
 
 const AddTodoService = async (payload = {}) => {
 
@@ -116,6 +126,18 @@ const DeleteTodoService = async (taskId="") => {
     return response
 }
 
+const CompleteTaskService = async (taskId="") => {
+
+    const request = await fetch(`${base_todo_api_url}/${taskId}/ok`, {
+        method: "post",
+        headers: static_header
+    })
+    const response = await request.json()
+
+    response.status = request.status
+
+    return response
+}
 
 
 // END OF TODO API 
@@ -127,5 +149,7 @@ export {
     RegisterService,
     AddTodoService,
     GetAllTodos,
-    DeleteTodoService
+    GetSingleTodo,
+    DeleteTodoService,
+    CompleteTaskService
 }

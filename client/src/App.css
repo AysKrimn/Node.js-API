@@ -9,6 +9,10 @@
     content: "• ";
 }
 
+.completed {
+
+    background-color: gainsboro !important;
+}
 
 #dropdown-button-dark-example1 {
 

@@ -4,18 +4,31 @@ import TaskCardOptions from './TaskCardOptions';
 
 function TaskCard(props) {
   
-  const { task } = props
+  const { task, editMode } = props
+  
+  let cardClass = "mb-4"
+  let cardCompleted = ""
+
+  if (task.completed === true) {
+
+    cardCompleted = "completed"
+  }
+
+  if (editMode) {
+      cardClass = "mb-2"
+  }
 
   return (
 
-    <Card className='mb-4'>
+    <>
+    <Card className={`${cardClass} ${cardCompleted}`}>
    
       <Card.Body>
 
         <div className="d-flex align-items-center">
 
         <Card.Title>Test User <small className='text-muted taskId'>(#{task._id})</small> </Card.Title>
-        <TaskCardOptions taskId = {task._id}></TaskCardOptions>
+        <TaskCardOptions taskId = {task._id} editMode={editMode}></TaskCardOptions>
 
         </div>
 
@@ -30,6 +43,17 @@ function TaskCard(props) {
 
       </Card.Body>
     </Card>
+
+    { editMode ?    
+
+      <div className='text-end'>
+          <button className='btn btn-primary'>Güncelle</button>
+      </div>
+
+    : null
+    }
+    </>
+    
   );
 }
 

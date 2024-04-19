@@ -1,15 +1,33 @@
 import Dropdown from 'react-bootstrap/Dropdown';
-import { DeleteTodoService } from '../Service/ServiceHandler';
+import { CompleteTaskService, DeleteTodoService } from '../Service/ServiceHandler';
 import { useContext } from 'react';
 import { TaskProvider } from '../Context/TaskContext';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function TaskCardOptions(props) {
   
-  const { taskId } = props
+  const { taskId, editMode } = props
   const { tasks, setTasks } = useContext(TaskProvider)
+  const yonlendir = useNavigate()
 
+
+  const setCompleted = async () => {
+
+      const request = await CompleteTaskService(taskId)
+      const instances = tasks.filter(task => task)
+      const previousInstance = instances.find(task => task._id === taskId)
+      previousInstance.completed = request.newOne.completed
+      
+      setTasks(instances)
+  }
+
+  const updateHandler = async () => {
+
+      yonlendir(`task/${taskId}`)    
+
+  }
   // bu fonksiyon todo siler
   const deleteHandler = async () => {
 
@@ -25,6 +43,11 @@ export default function TaskCardOptions(props) {
                 // state güncelle
                 const getCurrentState = tasks.filter(task => task._id !== taskId)
                 setTasks(getCurrentState)
+
+                if (editMode) {
+
+                    yonlendir("/")
+                }
             }
     }
 
@@ -39,11 +62,17 @@ export default function TaskCardOptions(props) {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item className='text-warning' as="button">
+
+          { editMode === undefined ?
+
+          <Dropdown.Item className='text-warning' as="button" onClick={updateHandler}>
             Güncelle
           </Dropdown.Item>
+
+          : null}
+
           <Dropdown.Item className='text-danger' as="button" onClick={deleteHandler}>Sil</Dropdown.Item>
-          <Dropdown.Item className='text-success' as="button">Tamamlandı Olarak İşaretle</Dropdown.Item>
+          <Dropdown.Item className='text-success' as="button" onClick={setCompleted}>Tamamlandı Olarak İşaretle</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
 

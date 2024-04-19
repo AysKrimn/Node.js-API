@@ -120,7 +120,7 @@ app.post("/:todoId/guncelle", async function(request, response) {
 // post isteği geliyosa body içinde ekstre bilgiler gönderilir
 app.post("/ekle", async function(request, response) {
 
-        const { task_data, userId } = request.body
+        const { task_data } = request.body
 
         console.log("GELEN VERİLER :", request.body)
 
@@ -133,7 +133,7 @@ app.post("/ekle", async function(request, response) {
         const new_todo = await todo_model.create({
 
                 task: task_data,
-                userId: userId
+                user: request.user.user._id
         })
 
         console.log("NEW TODO:", new_todo)
@@ -143,6 +143,32 @@ app.post("/ekle", async function(request, response) {
 })
 
 
+app.post('/:taskId/ok', async function(request, response) {
+
+    const task = await todo_model.findOne({ _id: request.params.taskId})
+
+    if (!task) {
+
+        return response.status(404).json({ data: "Böyle bir task bulunamadı."})
+    }
+
+    let output_message = "Task tamamlanmadı olarak işaretlendi."
+
+    if (task.completed === true) {
+
+        task.completed = false
+    } else {
+
+        task.completed = true
+        output_message = "Task tamamlandı olarak işaretlendi."
+    }
+
+
+    await task.save()
+    return response.status(200).json({ data: output_message, newOne: task})
+
+
+})
 
 
 export default app

@@ -6,6 +6,12 @@ const todoSchema = new Schema({
 
     // doc | field
     // doc icinde görünmez bir _id var.
+    user: {
+
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: true
+    },
     
     task: {
         type: String,

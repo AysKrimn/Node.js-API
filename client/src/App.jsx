@@ -11,6 +11,7 @@ import RegisterPage from './Pages/RegisterPage'
 
 // layouts
 import SiteLayout from './Layouts/SiteLayout'
+import EditTaskPage from './Pages/EditTaskPage'
 
 
 
@@ -27,6 +28,7 @@ function App() {
                 <Route element={<SiteLayout></SiteLayout>}>
 
                         <Route path='/' element={<HomePage></HomePage>}></Route>
+                        <Route path='/task/:taskId' element={<EditTaskPage></EditTaskPage>}></Route>
                         <Route path='/login' element={<LoginPage></LoginPage>}></Route>
                         <Route path='/register' element={<RegisterPage></RegisterPage>}></Route>
                 </Route>
