@@ -26,9 +26,10 @@ function TaskCard(props) {
     //       setDisabledBtn(true)
     //   }
     }
+
+
   const { task, editMode } = props
-
-
+  
   // task, taskId
   const updateTask = async () => {
 
@@ -42,74 +43,95 @@ function TaskCard(props) {
     }
   }
 
+
+
+
   const updateLayout = () => {
 
-    // updateMode varsa card.text yoksa textarea döndür
-    if (editMode) {
+    let defaultClass = ""
 
-      return ( 
-      
-          <>
-              <div className='mt-4'>
+    if (task.completed === true) {
 
-                  <input className='form-control' type="text" placeholder={task.task} 
-                    value={input} onChange={e => changeInputState(e)}
-                  />
-              </div>
-          </>
-          
-
-      )
-
+        defaultClass = "mb-3 completed"
+    
     } else {
 
-        return <Card.Text> {task.task} </Card.Text>
+      defaultClass = "mb-3"
     }
 
+    return (
+
+        <>
+        
+        <Card className={defaultClass}>
+   
+        <Card.Body>
+
+          <div className="d-flex align-items-center">
+
+                <Card.Title>{task.user.name} <small className='text-muted taskId'>(#{task.user._id})</small> </Card.Title>
+                <TaskCardOptions 
+
+                    task = {task} 
+                    editMode = {editMode}>
+
+                </TaskCardOptions>
+
+          </div>
+
+ 
+          { 
+          
+          editMode === true 
+          
+          ?  <div className='mt-4'>
+
+                <input className='form-control' type="text" placeholder={task.task} 
+                   value={input} onChange={e => changeInputState(e)}
+                 />
+              </div>
+          
+          :  <Card.Text> {task.task} </Card.Text>
+        
+          }
+
+
+          <div className="d-flex align-items-center mt-3">
+
+              <Card.Text className='mt-3'>
+                  <small className='text-muted task-date'>{task.createdAt}</small>
+              </Card.Text>
+
+              {
+
+                editMode === true ?
+            
+
+              <div className='ms-auto'>
+                  <button onClick={updateTask} disabled={disabledBtn} className='btn btn-success'>Güncelle</button>
+              </div>
+
+              : null
+
+              }
+          </div>
+
+
+          </Card.Body>
+      </Card>
+        
+        </>
+    )
+
   }
+
+
 
   return (
 
     <>
-    <Card className='mb-3'>
    
-      <Card.Body>
-
-        <div className="d-flex align-items-center">
-
-        <Card.Title>{task.user.name} <small className='text-muted taskId'>(#{task.user._id})</small> </Card.Title>
-        <TaskCardOptions taskId = {task._id} taskAuthorId={task.user._id} editMode = {editMode}></TaskCardOptions>
-
-        </div>
-
-    
         {updateLayout()}
-
-
-        <div className="d-flex align-items-center mt-3">
-
-            <Card.Text className='mt-3'>
-                <small className='text-muted task-date'>{task.createdAt}</small>
-            </Card.Text>
-
-            {
-
-              editMode === true ?
-         
-
-            <div className='ms-auto'>
-                <button onClick={updateTask} disabled={disabledBtn} className='btn btn-success'>Güncelle</button>
-            </div>
-
-            : null
-
-            }
-        </div>
-   
-
-      </Card.Body>
-    </Card>
-
     </>
   );
 }

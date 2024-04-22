@@ -16,3 +16,9 @@
     background-color: black !important;
     border: none;
 }
+
+
+div.completed {
+
+    background-color: #caffca;
+}

@@ -68,7 +68,7 @@ app.get("/:todoId/sil", async function(request, response) {
 // bu endpoint todo günceller
 app.post("/:todoId/guncelle", async function(request, response) {
 
-        const { completed, task_data} = request.body
+        const { task_data } = request.body
         const todoId = request.params.todoId
         try {
                 // eğer task_data varsa kullanıcı task içeriğini değiştirmek istiyor.
@@ -115,6 +115,45 @@ app.post("/:todoId/guncelle", async function(request, response) {
  
 
 })
+
+// bu endpoint tamamlandı / tamamlanmadı olayını ayarlar
+app.post("/:todoId/complete", async function(request, response) {
+
+        const todoId = request.params.todoId
+        
+        let sonuc = ""
+
+        try {
+            
+            const todo = await todo_model.findOne({ _id: todoId}).populate("user")  
+
+            if (todo && todo.completed === true) {
+
+                todo.completed = false
+                sonuc = "Bu task tamamlanmadı olarak işaretlendi."
+
+            } else if (todo && todo.completed === false) {
+
+                todo.completed = true
+                sonuc = "Bu task tamamlandı olarak işaretlendi."
+            }
+
+            // veritabanını kaydet
+            await todo.save()
+
+            return response.status(200).json({ data: todo, message: sonuc})
+
+        } catch (error) {
+            
+            console.log("TODO COMPLETE API:", error)
+            return response.status(404).json({ data: "böyle bir todo bulunamadı."})
+        }
+      
+
+        
+})
+
+
 
 // bu endpoint veri ekler
 // post isteği geliyosa body içinde ekstre bilgiler gönderilir

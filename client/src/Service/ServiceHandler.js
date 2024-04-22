@@ -134,6 +134,29 @@ const UpdateTodoService = async (payload = {}) => {
     return response
 }
 
+
+const CompletedTodoService = async (payload = {}) => {
+
+    if (!payload.taskId) {
+
+        return console.error("Bir task id belirtmek zorundasınız.")
+    }
+
+    const request = await fetch(`${base_todo_api_url}/${payload.taskId}/complete`, {
+
+        method: "post",
+        headers: static_header,
+
+        body: JSON.stringify({})
+
+    })
+
+    const response = await request.json()
+    response.status = request.status
+
+    return response
+}
+
 const DeleteTodoService = async (taskId="") => {
 
     const request = await fetch(`${base_todo_api_url}/${taskId}/sil`, {
@@ -160,5 +183,6 @@ export {
     GetAllTodos,
     GetSingleTodo,
     UpdateTodoService,
-    DeleteTodoService
+    DeleteTodoService,
+    CompletedTodoService
 }

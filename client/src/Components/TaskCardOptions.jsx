@@ -1,22 +1,41 @@
 import Dropdown from 'react-bootstrap/Dropdown';
-import { DeleteTodoService } from '../Service/ServiceHandler';
-import { useContext } from 'react';
+import { CompletedTodoService, DeleteTodoService } from '../Service/ServiceHandler';
+import { useContext, useState } from 'react';
 import { TaskProvider } from '../Context/TaskContext';
 import { useNavigate } from 'react-router-dom';
 import { UserProvider } from '../Context/UserContext';
 
 export default function TaskCardOptions(props) {
   
-  const { taskId, taskAuthorId, editMode } = props
+  const { task, editMode } = props
   const { tasks, setTasks } = useContext(TaskProvider)
   const { user } = useContext(UserProvider)
 
+
   const yonlendir = useNavigate()
+  // bu fonksiyon completed olayını ayarlar
+  const completeHandler = async () => {
+
+        const request = await CompletedTodoService({ taskId: task._id })
+        console.log("[TASK COMPLETE API]:", request)
+        
+        if (request.status === 200) {
+
+            const taskInstances = tasks.filter(i_task => i_task)
+            const targetTask = taskInstances.find(i_task => i_task._id === task._id)
+            targetTask.completed = request.data.completed
+            // state güncelle
+            setTasks(taskInstances)
+
+        }
+
+  }
+
   // bu fonksiyon todo gunceller
   const updateHanlder = async () => {
 
 
-      yonlendir(`/task/${taskId}/edit`)
+      yonlendir(`/task/${task._id}/edit`)
 
   }
   // bu fonksiyon todo siler
@@ -26,13 +45,13 @@ export default function TaskCardOptions(props) {
 
     if (onayla) {
 
-            const request = await DeleteTodoService(taskId)
+            const request = await DeleteTodoService(task._id)
             console.log("[TASK DELETE API]:", request)
 
             if (request.status === 200) {
 
                 // state güncelle
-                const getCurrentState = tasks.filter(task => task._id !== taskId)
+                const getCurrentState = tasks.filter(i_task => i_task._id !== task._id)
                 setTasks(getCurrentState)
             }
 
@@ -47,9 +66,22 @@ export default function TaskCardOptions(props) {
 
 
 
+  const buttonOptions = {
+
+    text: "Tamamlandı Olarak İşaretle",
+    style: "text-success"
+
+  }
+
+  if (task.completed === true) {
+
+    buttonOptions.text = "Tamamlanmadı Olarak İşaretle"
+    buttonOptions.style = "text-info"
+  }
+
   const updateLayout = () => {
 
-      if (user?._id === taskAuthorId) {
+      if (user?._id === task.user._id) {
 
           return (
 
@@ -66,7 +98,11 @@ export default function TaskCardOptions(props) {
                     }
                     
                     <Dropdown.Item className='text-danger' as="button" onClick={deleteHandler}>Sil</Dropdown.Item>
-                    <Dropdown.Item className='text-success' as="button">Tamamlandı Olarak İşaretle</Dropdown.Item>
+                    <Dropdown.Item className={buttonOptions.style} as="button" onClick={completeHandler} >
+
+                        {buttonOptions.text}
+
+                    </Dropdown.Item>
 
               </Dropdown.Menu>
               </Dropdown>
